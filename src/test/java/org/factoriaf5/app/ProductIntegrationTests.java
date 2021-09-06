@@ -21,13 +21,25 @@ class ProductIntegrationTests {
     private MockMvc server;
 
     @Test
-    void theServerRespondsToYourName() throws Exception {
+    void buy_1() throws Exception {
 
         server.perform(post("/products/buy")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("[{ \"name\": \"camiseta\", \"price\": \"10.00\" },{ \"name\": \"pantalón\", \"price\": \"30.00\" }]"))
+                        .content("[{ \"name\": \"camiseta\", \"price\": 10 },{ \"name\": \"pantalón\", \"price\": 30 }]"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.response", equalTo("Gracias por su compra. 2 productos por un total de 40 euros")));
+
+    }
+
+
+    @Test
+    void buy_2() throws Exception {
+
+        server.perform(post("/products/buy")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("[{ \"name\": \"camiseta\", \"price\": 10, \"discountHalfPrice\": true },{ \"name\": \"pantalón\", \"price\": 30 }]"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.response", equalTo("Gracias por su compra. 2 productos por un total de 35 euros")));
 
     }
 
